@@ -31,13 +31,17 @@ print("well guessed")
 
 
 #Question 4
-rows = 6
-# Increasing pattern
+rows = 5
+# uppper triangle
 for i in range(1, rows + 1):
-    print("*" * i)
-# Decreasing pattern
+    for j in range(i):
+       print("*" , end=" " )      #prints on the same line with space
+    print()                       #moves to the next line
+# lower triangle
 for i in range(rows - 1, 0, -1):
-    print("*" * i)
+    for j in range(i):
+       print("*" , end=" " )      #prints on the same line with space
+    print()  
 
    
 
