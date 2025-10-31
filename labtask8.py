@@ -87,4 +87,138 @@ heuristic = {
 
 path, cost = a_star_search(graph, 'Arad', 'Bucharest', heuristic)
 print("Optimal Path:", path)
+
 print("Total Cost:", cost)
+
+
+# 8 -----------puzzle game
+
+
+import heapq
+
+# Heuristic: number of misplaced tiles
+def misplaced_tiles(state, goal):
+    return sum(1 for i in range(len(state)) if state[i] != 0 and state[i] != goal[i])
+
+# Generate neighbors by sliding blank tile
+def get_neighbors(state):
+    neighbors = []
+    idx = state.index(0)  # blank position
+    x, y = divmod(idx, 3)
+
+    moves = {
+        'Up': (x-1, y),
+        'Down': (x+1, y),
+        'Left': (x, y-1),
+        'Right': (x, y+1)
+    }
+
+    for move, (nx, ny) in moves.items():
+        if 0 <= nx < 3 and 0 <= ny < 3:
+            new_idx = nx * 3 + ny
+            new_state = list(state)
+            new_state[idx], new_state[new_idx] = new_state[new_idx], new_state[idx]
+            neighbors.append((tuple(new_state), move))
+    return neighbors
+
+# A* search for 8-puzzle
+def a_star(start, goal):
+    open_list = [(misplaced_tiles(start, goal), 0, start, [])]  # (f, g, state, path)
+    visited = {}
+
+    while open_list:
+        f, g, state, path = heapq.heappop(open_list)
+
+        if state == goal:
+            return path, g  # solution path + cost
+
+        if state in visited and visited[state] <= g:
+            continue
+        visited[state] = g
+
+        for neighbor, move in get_neighbors(state):
+            new_g = g + 1
+            new_f = new_g + misplaced_tiles(neighbor, goal)
+            heapq.heappush(open_list, (new_f, new_g, neighbor, path + [move]))
+
+    return None, float("inf")
+
+# -------------------------------
+# Example usage
+start = (1, 2, 3,
+         4, 0, 6,
+         7, 5, 8)  # initial state
+
+goal = (1, 2, 3,
+        4, 5, 6,
+        7, 8, 0)  # goal state
+
+path, cost = a_star(start, goal)
+
+print("Solution moves:", path)
+print("Total moves required:", cost)# 8 puzzle game
+
+
+import heapq
+
+# Heuristic: number of misplaced tiles
+def misplaced_tiles(state, goal):
+    return sum(1 for i in range(len(state)) if state[i] != 0 and state[i] != goal[i])
+
+# Generate neighbors by sliding blank tile
+def get_neighbors(state):
+    neighbors = []
+    idx = state.index(0)  # blank position
+    x, y = divmod(idx, 3)
+
+    moves = {
+        'Up': (x-1, y),
+        'Down': (x+1, y),
+        'Left': (x, y-1),
+        'Right': (x, y+1)
+    }
+
+    for move, (nx, ny) in moves.items():
+        if 0 <= nx < 3 and 0 <= ny < 3:
+            new_idx = nx * 3 + ny
+            new_state = list(state)
+            new_state[idx], new_state[new_idx] = new_state[new_idx], new_state[idx]
+            neighbors.append((tuple(new_state), move))
+    return neighbors
+
+# A* search for 8-puzzle
+def a_star(start, goal):
+    open_list = [(misplaced_tiles(start, goal), 0, start, [])]  # (f, g, state, path)
+    visited = {}
+
+    while open_list:
+        f, g, state, path = heapq.heappop(open_list)
+
+        if state == goal:
+            return path, g  # solution path + cost
+
+        if state in visited and visited[state] <= g:
+            continue
+        visited[state] = g
+
+        for neighbor, move in get_neighbors(state):
+            new_g = g + 1
+            new_f = new_g + misplaced_tiles(neighbor, goal)
+            heapq.heappush(open_list, (new_f, new_g, neighbor, path + [move]))
+
+    return None, float("inf")
+
+# -------------------------------
+# Example usage
+start = (1, 2, 3,
+         4, 0, 6,
+         7, 5, 8)  # initial state
+
+goal = (1, 2, 3,
+        4, 5, 6,
+        7, 8, 0)  # goal state
+
+path, cost = a_star(start, goal)
+
+print("Solution moves:", path)
+print("Total moves required:", cost)
